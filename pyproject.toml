@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.10"
 pandas = "^2.2.3"
+django = "^5.1.4"
 
 [build-system]
 requires = ["poetry-core"]
