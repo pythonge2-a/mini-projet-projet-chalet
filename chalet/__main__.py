@@ -1,3 +1,6 @@
+from chalet import __reading__
+
+
 def main():
     print('hello')
 
