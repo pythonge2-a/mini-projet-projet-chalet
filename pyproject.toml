@@ -3,8 +3,6 @@ name = "chalet"
 version = "0.1.0"
 description = "Bin-Lin domotique"
 authors = ["Aurore Delessert <aurore.delessert@heig-vd.ch>,Thomas Bachmann <thomas.bachmann@heig-vd.ch>, Alexis Lantier <alexis.lantier@heig-vd.ch>"]
-            
-           
 license = "HEIG"
 readme = "README.md"
 
@@ -12,7 +10,10 @@ readme = "README.md"
 python = "^3.10"
 pandas = "^2.2.3"
 
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+chalet = "chalet.__main__:main"
+ 
