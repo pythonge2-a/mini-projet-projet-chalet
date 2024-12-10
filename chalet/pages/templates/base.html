@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Titre par défaut{% endblock %}</title>
+    <title>{% block title %}Default{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<nav>
+    {% if user.is_authenticated %}
+        <p>Bonjour, {{ user.username }} !</p>
+        <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none; text-decoration: underline; color: blue;">Déconnexion</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Connexion</a>
+        <a href="{% url 'register' %}">Créer un compte</a>
+    {% endif %}
+</nav>
 <body>
     <header>
         <h1>Chalet Bin-Lin</h1>
