@@ -1,4 +1,4 @@
-from chalet import __reading__
+from reading import __reading__
 
 
 def main():
