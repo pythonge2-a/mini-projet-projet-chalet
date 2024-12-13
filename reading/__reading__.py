@@ -5,7 +5,7 @@ file_path = 'data/simulated_weather_data.csv'
 df = pd.read_csv(file_path)
 
 last_row = df.tail(1)
-#print(last_row)
+last_row = last_row.to_dict(orient='records')[0]
 
 current_date_time = last_row['datetime']
 current_temperature = last_row['temperature']
@@ -20,6 +20,8 @@ def get_current_temperature():
 def get_current_luminosity():
     return current_luminosity
 
+
+
 # meteo condition --> 0: sunny, 1: cloudy, 2: rainy, 3: snowy, -1 error
 def get_current_weather_condition():
     if current_weather_condition == 'sunny':
@@ -32,6 +34,8 @@ def get_current_weather_condition():
         return 3
     else:
         return -1
+    
+
 
 
 
