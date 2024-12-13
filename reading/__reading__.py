@@ -44,31 +44,44 @@ def get_luminosity_graph():
 def get_weather_condition_graph():
     return df['weather_condition'].tolist()
 
+def get_datetime_list():
+    return df['datetime'].tolist()
 
 def show_temperature_graph():
-    plt.plot(get_temperature_graph())
+    plt.plot(get_datetime_list(), get_temperature_graph())
     plt.title('Temperature')
+    plt.xlabel('Time')
+    plt.ylabel('Temperature')
     plt.show()
+
 def show_luminosity_graph():
-    plt.plot(get_luminosity_graph())
+    plt.plot(get_datetime_list(), get_luminosity_graph())
     plt.title('Luminosity')
+    plt.xlabel('Time')
+    plt.ylabel('Luminosity')
     plt.show()
+
 def show_weather_condition_graph():
-    #afficher des points et non des lignes
-    plt.plot(get_weather_condition_graph(), 'o')
+    plt.plot(get_datetime_list(), get_weather_condition_graph(), 'o')
     plt.title('Weather Condition')
+    plt.xlabel('Time')
+    plt.ylabel('Weather Condition')
     plt.show()
 
 def show_all_graphs():
-    ## 3 sur meme graph
-    fig, axs = plt.subplots(3)
+    fig, axs = plt.subplots(3, sharex=True)
     fig.suptitle('Weather Data')
-    axs[0].plot(get_temperature_graph())
+    datetime_list = get_datetime_list()
+    axs[0].plot(datetime_list, get_temperature_graph())
     axs[0].set_title('Temperature')
-    axs[1].plot(get_luminosity_graph())
+    axs[0].set_ylabel('Temperature')
+    axs[1].plot(datetime_list, get_luminosity_graph())
     axs[1].set_title('Luminosity')
-    axs[2].plot(get_weather_condition_graph(),'o')
+    axs[1].set_ylabel('Luminosity')
+    axs[2].plot(datetime_list, get_weather_condition_graph(), 'o')
     axs[2].set_title('Weather Condition')
+    axs[2].set_ylabel('Weather Condition')
+    axs[2].set_xlabel('Time')
     plt.show()
 
 show_all_graphs()
