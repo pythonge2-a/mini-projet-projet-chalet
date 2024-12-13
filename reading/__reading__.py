@@ -54,7 +54,9 @@ def show_luminosity_graph():
     plt.title('Luminosity')
     plt.show()
 def show_weather_condition_graph():
-    plt.plot(get_weather_condition_graph(),'.')
+    #afficher des points et non des lignes
+    plt.plot(get_weather_condition_graph(), 'o')
+    plt.title('Weather Condition')
     plt.show()
 
 def show_all_graphs():
@@ -65,7 +67,7 @@ def show_all_graphs():
     axs[0].set_title('Temperature')
     axs[1].plot(get_luminosity_graph())
     axs[1].set_title('Luminosity')
-    axs[2].plot(get_weather_condition_graph())
+    axs[2].plot(get_weather_condition_graph(),'o')
     axs[2].set_title('Weather Condition')
     plt.show()
 
