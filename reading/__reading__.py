@@ -33,3 +33,6 @@ def get_current_weather_condition():
     else:
         return -1
 
+
+
+
