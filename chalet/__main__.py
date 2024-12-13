@@ -3,7 +3,7 @@ from reading import __reading__ as rd
 def main():
     print("Chalet is running")
     temp = rd.get_current_temperature()
-    rd.show_temperature_graph()
+    rd.show_all_graphs()
     print("Current temperature is: ", temp)
     
 
