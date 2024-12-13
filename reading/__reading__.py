@@ -54,7 +54,7 @@ def show_luminosity_graph():
     plt.title('Luminosity')
     plt.show()
 def show_weather_condition_graph():
-    plt.plot(get_weather_condition_graph())
+    plt.plot(get_weather_condition_graph(),'.')
     plt.show()
 
 def show_all_graphs():
