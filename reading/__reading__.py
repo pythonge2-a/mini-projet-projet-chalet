@@ -1,6 +1,7 @@
 # lecture du fichier d'input 
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 file_path = 'data/simulated_weather_data.csv'
 df = pd.read_csv(file_path)
@@ -48,44 +49,61 @@ def get_datetime_list():
     return df['datetime'].tolist()
 
 def show_temperature_graph():
+    plt.figure(figsize=(10, 5))
     plt.plot(get_datetime_list(), get_temperature_graph())
     plt.title('Temperature')
     plt.xlabel('Time')
-    plt.ylabel('Temperature')
+    plt.ylabel('Temperature[°C]')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     plt.show()
 
 def show_luminosity_graph():
+    plt.figure(figsize=(10, 5))
     plt.plot(get_datetime_list(), get_luminosity_graph())
     plt.title('Luminosity')
     plt.xlabel('Time')
-    plt.ylabel('Luminosity')
+    plt.ylabel('Luminosity[lux]')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     plt.show()
 
 def show_weather_condition_graph():
+    plt.figure(figsize=(10, 5))
     plt.plot(get_datetime_list(), get_weather_condition_graph(), 'o')
     plt.title('Weather Condition')
     plt.xlabel('Time')
-    plt.ylabel('Weather Condition')
+    plt.ylabel('Weather Condition[0: Sunny, 1: Cloudy, 2: Rainy, 3: Snowy]')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     plt.show()
 
 def show_all_graphs():
-    fig, axs = plt.subplots(3, sharex=True)
-    fig.suptitle('Weather Data')
+    fig, axs = plt.subplots(3, sharex=True, figsize=(10, 15))
+    fig.suptitle('Weather Data[]')
     datetime_list = get_datetime_list()
+    
     axs[0].plot(datetime_list, get_temperature_graph())
     axs[0].set_title('Temperature')
-    axs[0].set_ylabel('Temperature')
+    axs[0].set_ylabel('Temperature[°C]')
+    
     axs[1].plot(datetime_list, get_luminosity_graph())
     axs[1].set_title('Luminosity')
-    axs[1].set_ylabel('Luminosity')
+    axs[1].set_ylabel('Luminosity[lux]')
+    
     axs[2].plot(datetime_list, get_weather_condition_graph(), 'o')
     axs[2].set_title('Weather Condition')
-    axs[2].set_ylabel('Weather Condition')
+    axs[2].set_ylabel('Weather Condition[0: Sunny, 1: Cloudy, 2: Rainy, 3: Snowy]')
     axs[2].set_xlabel('Time')
+    
+    for ax in axs:
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M:%S'))
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator())
+        ax.tick_params(axis='x', rotation=45)
+    
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.show()
 
-show_all_graphs()
-
-
+show_luminosity_graph()
 
 
