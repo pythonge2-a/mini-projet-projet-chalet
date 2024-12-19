@@ -12,7 +12,7 @@ last_row = last_row.to_dict(orient='records')[0]
 current_date_time = last_row['datetime']
 current_temperature = last_row['temperature']
 current_luminosity = last_row['luminosity']
-current_weather_condition = last_row['weather_condition']
+current_humidity = last_row['humidity']
 
 
 def get_current_date_time():
@@ -25,14 +25,14 @@ def get_current_luminosity():
 
 
 # meteo condition --> 0: sunny, 1: cloudy, 2: rainy, 3: snowy, -1 error
-def get_current_weather_condition():
-    if current_weather_condition == 'Sunny':
+def get_current_humidity():
+    if current_humidity == 'Sunny':
         return 0
-    elif current_weather_condition == 'Cloudy':
+    elif current_humidity == 'Cloudy':
         return 1
-    elif current_weather_condition == 'Rainy':
+    elif current_humidity == 'Rainy':
         return 2
-    elif current_weather_condition == 'Snowy':
+    elif current_humidity == 'Snowy':
         return 3
     else:
         return -1
@@ -42,8 +42,8 @@ def get_temperature_graph():
     return df['temperature'].tolist()
 def get_luminosity_graph():
     return df['luminosity'].tolist()
-def get_weather_condition_graph():
-    return df['weather_condition'].tolist()
+def get_humidity_graph():
+    return df['humidity'].tolist()
 
 def get_datetime_list():
     return df['datetime'].tolist()
@@ -68,12 +68,12 @@ def show_luminosity_graph():
     plt.tight_layout()
     plt.show()
 
-def show_weather_condition_graph():
+def show_humidity_graph():
     plt.figure(figsize=(10, 5))
-    plt.plot(get_datetime_list(), get_weather_condition_graph(), 'o')
-    plt.title('Weather Condition')
+    plt.plot(get_datetime_list(), get_humidity_graph(), 'o')
+    plt.title('Humidity')
     plt.xlabel('Time')
-    plt.ylabel('Weather Condition[0: Sunny, 1: Cloudy, 2: Rainy, 3: Snowy]')
+    plt.ylabel('Humidity')
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
@@ -91,9 +91,9 @@ def show_all_graphs():
     axs[1].set_title('Luminosity')
     axs[1].set_ylabel('Luminosity[lux]')
     
-    axs[2].plot(datetime_list, get_weather_condition_graph(), 'o')
-    axs[2].set_title('Weather Condition')
-    axs[2].set_ylabel('Weather Condition[0: Sunny, 1: Cloudy, 2: Rainy, 3: Snowy]')
+    axs[2].plot(datetime_list, get_humidity_graph(), 'o')
+    axs[2].set_title('Humidity')
+    axs[2].set_ylabel('Humidity')
     axs[2].set_xlabel('Time')
     
     for ax in axs:
