@@ -99,7 +99,6 @@ def show_all_graphs():
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.show()
 
-show_all_graphs()
 
 # get meteo infos 
 
