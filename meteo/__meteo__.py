@@ -2,6 +2,7 @@ import requests
 import time
 import json
 from datetime import datetime, timedelta
+import matplotlib.pyplot as plt
 
 API_KEY = "a6c1dbb02550e86bcd5e14e948c3bba3"
 LATITUDE = 46.77920475844563
@@ -69,6 +70,30 @@ def get_weather_data(history):
     else:
         print("Erreur lors de la récupération des données météo.")
 
+# Fonction pour générer un graphique des températures mises bout à bout
+def plot_combined_temperatures(history):
+    all_temperatures = []
+
+    # Rassembler toutes les températures pour tous les jours
+    for date, data in history.items():
+        all_temperatures.extend(data["temperatures"])
+
+    plt.figure(figsize=(12, 6))
+
+    # Tracer toutes les températures combinées
+    plt.plot(all_temperatures, label="Températures", linestyle='-', marker='o')
+
+    plt.title("Températures sur les 7 Derniers Jours")
+    plt.xlabel("Mesures toutes les 15 minutes")
+    plt.ylabel("Température (°C)")
+    plt.grid(True)
+    plt.legend()
+    
+    # Affichage du graphique
+    plt.tight_layout()
+    plt.show()
+
+# Fonction pour obtenir la dernière température
 def get_last_temperature(history):
     last_temp = None
     for day, data in history.items():
@@ -76,6 +101,7 @@ def get_last_temperature(history):
             last_temp = data["temperatures"][-1]
     return last_temp
 
+# Fonction pour obtenir la dernière pression
 def get_last_pressure(history):
     last_pressure = None
     for day, data in history.items():
@@ -83,6 +109,7 @@ def get_last_pressure(history):
             last_pressure = data["pressures"][-1]
     return last_pressure
 
+# Fonction pour obtenir la dernière humidité
 def get_last_humidity(history):
     last_humidity = None
     for day, data in history.items():
@@ -90,6 +117,7 @@ def get_last_humidity(history):
             last_humidity = data["humidities"][-1]
     return last_humidity
 
+# Fonction pour obtenir la dernière condition météo
 def get_last_weather_condition(history):
     last_condition = None
     for day, data in history.items():
@@ -98,14 +126,14 @@ def get_last_weather_condition(history):
     return last_condition
 
 
-
 history = load_history()
 get_weather_data(history)
 
-# Boucle pour récupérer et ajouter les nouvelles données toutes les 15 minutes (900 secondes)
-# génération du graphique
-
+# Boucle pour récupérer les nouvelles données toutes les 15 minutes
 while True:
-    
-    time.sleep(900)  # 15 minutes
     get_weather_data(history)
+
+    # Après la récupération, afficher le graphique avec toutes les températures mises bout à bout
+    plot_combined_temperatures(history)
+    
+    time.sleep(900)  # Attendre 15 minutes avant la prochaine récupération
