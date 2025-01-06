@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
-file_path = 'data/chalet_data'
+file_path = 'data/chalet_data.csv'
 df = pd.read_csv(file_path)
 
 last_row = df.tail(1)
@@ -13,9 +13,10 @@ current_date_time = last_row['datetime']
 current_temperature = last_row['temperature']
 current_luminosity = last_row['luminosity']
 current_humidity = last_row['humidity']
-current_lamp1_state = last_row['lamp1_state']
-current_lamp2_state = last_row['lamp2_state']
-current_lamp3_state = last_row['lamp3_state']
+current_lamp1_state = last_row['lamp1']
+current_lamp2_state = last_row['lamp2']
+current_lamp3_state = last_row['lamp3']
+current_velux_position = last_row['velux_pos']
 def get_current_lamp_state():
     list_lamp = [current_lamp1_state, current_lamp2_state, current_lamp3_state]
     return list_lamp
@@ -28,6 +29,8 @@ def get_current_luminosity():
     return current_luminosity
 def get_current_humidity():
     return current_humidity
+def get_current_velux_position():
+    return current_velux_position
 
 # graphs
 def get_temperature_graph():
@@ -96,7 +99,8 @@ def show_all_graphs():
     plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.show()
 
-show_all_graphs()
+
+# get meteo infos 
 
 
 
