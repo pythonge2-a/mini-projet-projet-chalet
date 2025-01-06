@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Captors{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Température</h2>
+                    <p class="card-text">{{ temperature_value }}°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Humidité</h2>
+                    <p class="card-text">{{ humidity_value }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">CO2</h2>
+                    <p class="card-text">{{ co2_value }} ppm</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Lumière</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label class="switch">
+                            <input type="checkbox" name="toggle_light" onchange="this.form.submit()" {% if light_status %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </form>
+                    <!--<p class="card-text mt-2">
+                        État de la lumière : {% if light_status %}Allumée{% else %}Éteinte{% endif %}
+                    </p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
