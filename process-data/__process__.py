@@ -1,7 +1,7 @@
 # Process des data et les rend disponibles pour l'application
 #
 
-import reading as rd
+import sim as rd
 
 #
 # Récupère les données actuelles avec reading

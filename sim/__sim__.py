@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
-file_path = 'data/chalet_data.csv'
+file_path = 'sym/data/chalet_data.csv'
 df = pd.read_csv(file_path)
 
 last_row = df.tail(1)

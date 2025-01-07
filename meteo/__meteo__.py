@@ -3,11 +3,14 @@ import time
 import json
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
+import os
 
 API_KEY = "a6c1dbb02550e86bcd5e14e948c3bba3"
 LATITUDE = 46.77920475844563
 LONGITUDE = 6.6589111250491975
 HISTORICAL_FILE = "historical_weather_data.json"  # Nom du fichier pour stocker les données
+GRAPH_FOLDER = "meteo/graphs"  # Dossier pour les graphiques
+file_path = os.path.join(GRAPH_FOLDER, "simple_graph.png")
 
 # Fonction pour charger l'historique à partir du fichier JSON
 def load_history():
@@ -24,7 +27,7 @@ def save_history(data):
     with open(HISTORICAL_FILE, "w") as file:
         json.dump(data, file, indent=4)
 
-# Fonction pour récupérer les données actuelles et les ajouter à l'historique
+
 def get_weather_data(history):
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={LATITUDE}&lon={LONGITUDE}&appid={API_KEY}&units=metric"
     
@@ -61,79 +64,110 @@ def get_weather_data(history):
         seven_days_ago = datetime.now() - timedelta(days=7)
         date_limit = seven_days_ago.strftime("%Y-%m-%d")
         
-        # Supprimer les jours qui sont plus vieux que 7 jours
+        
         history = {day: data for day, data in history.items() if day >= date_limit}
         
-        # Sauvegarder les données mises à jour
         save_history(history)
         
     else:
         print("Erreur lors de la récupération des données météo.")
 
-# Fonction pour générer un graphique des températures mises bout à bout
-def plot_combined_temperatures(history):
+def plot_weather_data(history):
     all_temperatures = []
+    all_pressures = []
+    all_humidities = []
+    all_weather_conditions = []  # Liste pour stocker les conditions météo
+    all_dates = []
 
-    # Rassembler toutes les températures pour tous les jours
+    # Rassembler toutes les données pour tous les jours
     for date, data in history.items():
-        all_temperatures.extend(data["temperatures"])
+        for i, temp in enumerate(data["temperatures"]):
+           
+            if i == 0:
+                all_dates.append(date)
+            else:
+                all_dates.append("")  
 
-    plt.figure(figsize=(12, 6))
+            all_temperatures.append(temp)
+            all_pressures.append(data["pressures"][i])
+            all_humidities.append(data["humidities"][i])
+            all_weather_conditions.append(data["weather_conditions"][i])
 
-    # Tracer toutes les températures combinées
-    plt.plot(all_temperatures, label="Températures", linestyle='-', marker='o')
+    # Assurez-vous que le dossier existe avant de sauvegarder l'image
+    if not os.path.exists(GRAPH_FOLDER):
+        os.makedirs(GRAPH_FOLDER)
 
-    plt.title("Températures sur les 7 Derniers Jours")
-    plt.xlabel("Mesures toutes les 15 minutes")
-    plt.ylabel("Température (°C)")
-    plt.grid(True)
-    plt.legend()
+    fig, axs = plt.subplots(4, 1, figsize=(10, 16), sharex=True)
+
+    # Graphique de la température
+    axs[0].plot(all_temperatures, label="Température", linestyle='-', marker='o', color='tab:blue')
+    axs[0].set_title("Évolution de la Température")
+    axs[0].set_ylabel("Température (°C)")
+    axs[0].grid(True)
+    axs[0].legend()
+
+    # Graphique de la pression
+    axs[1].plot(all_pressures, label="Pression", linestyle='-', marker='o', color='tab:orange')
+    axs[1].set_title("Évolution de la Pression")
+    axs[1].set_ylabel("Pression (hPa)")
+    axs[1].grid(True)
+    axs[1].legend()
+
+    # Graphique de l'humidité
+    axs[2].plot(all_humidities, label="Humidité", linestyle='-', marker='o', color='tab:green')
+    axs[2].set_title("Évolution de l'Humidité")
+    axs[2].set_ylabel("Humidité (%)")
+    axs[2].grid(True)
+    axs[2].legend()
+
+    # Graphique des conditions météo
+    weather_labels = list(set(all_weather_conditions))  # Liste des conditions météo uniques
     
-    # Affichage du graphique
+    weather_colors = {
+        'clear sky': '#FFDD00',   # Jaune clair
+        'few clouds': '#A9A9A9',   # Gris clair
+        'scattered clouds': '#A9A9A9',  # Gris clair
+        'broken clouds': '#A9A9A9',  # Gris
+        'shower rain': '#00CED1',  # Cyan
+        'rain': '#1E90FF',         # Bleu
+        'thunderstorm': '#8A2BE2', # Violet
+        'snow': '#FFFFFF',         # Blanc
+        'mist': '#98FB98'          # Vert pâle
+    }
+    
+    weather_color_map = [weather_colors.get(condition, '#808080') for condition in all_weather_conditions]
+
+    # Scatter plot des conditions météo
+    scatter = axs[3].scatter(range(len(all_weather_conditions)), [0] * len(all_weather_conditions), c=weather_color_map, s=50, marker='o', edgecolors='none')
+    axs[3].set_title("Conditions Météorologiques")
+    axs[3].set_yticks([])  # On ne veut pas d'échelle sur l'axe Y
+    axs[3].set_xlabel("Mesures")
+    axs[3].grid(False)
+
+    # Ajouter les dates sur l'axe X pour la première mesure de chaque jour
+    axs[3].set_xticks(range(len(all_temperatures)))
+    axs[3].set_xticklabels(all_dates, rotation=45)
+
+    # Ajuster l'axe X pour que les dates n'apparaissent qu'une seule fois par jour
+    axs[3].tick_params(axis='x', which='major', labelsize=10)  
+    axs[3].set_xticks([i for i in range(len(all_temperatures)) if all_dates[i] != ""])  
+    axs[3].set_xticklabels([d for d in all_dates if d != ""])  
+
+    # Ajouter la légende des couleurs
+    handles = []
+    for condition, color in weather_colors.items():
+        handles.append(plt.Line2D([0], [0], marker='o', color='w', markerfacecolor=color, markersize=10, label=condition))
+
+    axs[3].legend(handles=handles, title="Conditions Météo", bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
+
+    # Sauvegarder le graphique
     plt.tight_layout()
-    plt.show()
-
-# Fonction pour obtenir la dernière température
-def get_last_temperature(history):
-    last_temp = None
-    for day, data in history.items():
-        if isinstance(data, dict) and "temperatures" in data and data["temperatures"]:
-            last_temp = data["temperatures"][-1]
-    return last_temp
-
-# Fonction pour obtenir la dernière pression
-def get_last_pressure(history):
-    last_pressure = None
-    for day, data in history.items():
-        if isinstance(data, dict) and "pressures" in data and data["pressures"]:
-            last_pressure = data["pressures"][-1]
-    return last_pressure
-
-# Fonction pour obtenir la dernière humidité
-def get_last_humidity(history):
-    last_humidity = None
-    for day, data in history.items():
-        if isinstance(data, dict) and "humidities" in data and data["humidities"]:
-            last_humidity = data["humidities"][-1]
-    return last_humidity
-
-# Fonction pour obtenir la dernière condition météo
-def get_last_weather_condition(history):
-    last_condition = None
-    for day, data in history.items():
-        if isinstance(data, dict) and "weather_conditions" in data and data["weather_conditions"]:
-            last_condition = data["weather_conditions"][-1]
-    return last_condition
+    plt.savefig(file_path)
 
 
-history = load_history()
-get_weather_data(history)
-
-# Boucle pour récupérer les nouvelles données toutes les 15 minutes
-while True:
+while 0: # a mettre a 1 
+    history = load_history()
     get_weather_data(history)
-
-    # Après la récupération, afficher le graphique avec toutes les températures mises bout à bout
-    plot_combined_temperatures(history)
+    plot_weather_data(history)
     
-    time.sleep(900)  # Attendre 15 minutes avant la prochaine récupération
+    time.sleep(900)  # Pause de 15 minutes avant la mise à jour suivante
