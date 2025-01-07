@@ -59,17 +59,17 @@ def insert_data(connection):
         
         # Insert devices
         devices = [
-            ('lamp_bedroom', 'off'),
-            ('lamp_bathroom', 'off'),
-            ('lamp_living_room', 'off'),
-            ('lamp_kitchen', 'off'),
-            ('heater_hedroom', 'off'),
-            ('heater_rest_of_chalet', 'off'),
-            ('skylight', 'closed'),
-            ('luminosity_living_room', 'normal'),
-            ('temperature sensor_bedroom', '18°C'),
-            ('temperature sensor_rest_of_chalet', '20°C'),
-            ('humidity sensor_all', '45%')
+            ('lamp_bedroom', 0),
+            ('lamp_bathroom', 0),
+            ('lamp_living_room', 0),
+            ('lamp_kitchen', 0),
+            ('heater_bedroom', 0),
+            ('heater_rest_of_chalet', 0),
+            ('skylight_living_room', 0),
+            ('luminosity_living_room[lux]', 200),
+            ('temperature_bedroom[°C]', 18),
+            ('temperature_rest_of_chalet[°C]', 20),
+            ('humidity_all[%]', 45)
         ]
         cursor.executemany('INSERT INTO devices (type, state) VALUES (?, ?)', devices)
         
@@ -101,17 +101,30 @@ def insert_data(connection):
     except Error as e:
         print(f"Error inserting data: {e}")
 
-# Example usage
+def get_device_state(connection, device_type):
+    """Get the state of a device by its type."""
+    cursor = connection.cursor()
+    cursor.execute('SELECT state FROM devices WHERE type = ?', (device_type,))
+    result = cursor.fetchone()
+    return result[0] if result else None
 
+def update_device_state(connection, device_type, new_state):
+    """Update the state of a device by its type."""
+    cursor = connection.cursor()
+    cursor.execute('UPDATE devices SET state = ? WHERE type = ?', (new_state, device_type))
+    connection.commit()
+
+
+#usage
 db_file = "database/data.db"
 connection = create_connection(db_file)
 
 if connection is not None:
     create_tables(connection)
     insert_data(connection)
-    
     # Close the connection
     connection.close()
     print("Connection closed")
 else:
     print("Failed to create the database connection")
+
