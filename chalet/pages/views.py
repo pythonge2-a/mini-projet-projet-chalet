@@ -12,10 +12,13 @@ def home_view(request):
 def graph_view(request):
     return render(request, 'graphics.html')
 
-light_status = False
+light_status_room = False
+light_status_living = False
+light_status_kitchen = False
+light_status_bathroom = False
 @login_required
 def captors_view(request):
-    global light_status
+    global light_status_room, light_status_living, light_status_kitchen, light_status_bathroom
     try:
         temperature_value = 22.5  # Remplacez par la méthode réelle pour obtenir la valeur du capteur
         humidity_value = 50.0  # Remplacez par la méthode réelle pour obtenir la valeur du capteur
@@ -27,13 +30,26 @@ def captors_view(request):
         co2_value = 'Erreur de récupération des données'
     
     if request.method == 'POST':
-        light_status = 'toggle_light' in request.POST
+        light_status_room = 'toggle_light_room' in request.POST
+        light_status_living = 'toggle_light_living' in request.POST
+        light_status_kitchen = 'toggle_light_kitchen' in request.POST
+        light_status_bathroom = 'toggle_light_bathroom' in request.POST
     
     context = {
-        'temperature_value': temperature_value,
-        'humidity_value': humidity_value,
-        'co2_value': co2_value,
-        'light_status': light_status,
+        'room_temperature_value': 22.5,
+        'room_humidity_value': 50.0,
+        'light_status_room' : light_status_room,
+        'living_temperature_value': 22.5,
+        'living_humidity_value': 50.0,
+        'light_status_living' : light_status_living,
+        'kitchen_temperature_value': 22.5,
+        'kitchen_humidity_value': 50.0,
+        'light_status_kitchen' : light_status_kitchen,
+        'bathroom_temperature_value': 22.5,
+        'bathroom_humidity_value': 50.0,
+        'light_status_bathroom' : light_status_bathroom,
+        'outside_temperature_value': 15,
+        'outside_humidity_value': 60.0,
     }
     return render(request, 'captors.html', context)
 
