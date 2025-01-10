@@ -1,23 +1,23 @@
 # Process des data et les rend disponibles pour l'application
 #
 
-import sim as rd
+import sim as sim
 
 #
 # Récupère les données actuelles avec reading
 #
 
 def get_current_date_time():
-    return rd.get_current_date_time()
+    return sim.get_current_date_time()
 
 def get_current_temperature():
-    return rd.get_current_temperature()
+    return sim.get_current_temperature()
 
 def get_current_luminosity():
-    return rd.get_current_luminosity()
+    return sim.get_current_luminosity()
 
 def get_state_lamp():
-    return rd.get_current_lamp_state()
+    return sim.get_current_lamp_state()
 
 #
 # Automation, logique
