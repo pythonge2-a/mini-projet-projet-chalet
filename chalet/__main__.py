@@ -16,7 +16,7 @@ def main():
     else:
         command = 'runserver'
         args = ['0.0.0.0:8000']
-    
+
     manage_main(command, *args)
 
 if __name__ == "__main__":
