@@ -66,7 +66,7 @@ class Database:
                 ('lamp_living_room', 'off'),
                 ('lamp_kitchen', 'off'),
                 ('heater_bedroom', 'off'),
-                ('heater_rest_of_chalet', 'off'),
+                ('heater_rest_of_chalet', '0'),
                 ('skylight_living_room', 'closed'),
                 ('luminosity_living_room', 'normal'),
                 ('temperature sensor_bedroom', '18°C'),

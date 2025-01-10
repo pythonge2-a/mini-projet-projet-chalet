@@ -1,4 +1,5 @@
 from meteo import __meteo__ as mt
+from database import __database__ as db
 import os
 import sys
 from pathlib import Path

@@ -1,8 +1,9 @@
 #
 # Process des data et les rend disponibles pour l'application
 #
-
 import database as db
+import schedule
+import threading
 import time
 
 def light_on_living_room():
@@ -53,6 +54,7 @@ def store_open():
     else:
         db.update_device_state('store_living_room', 'closed')
         
+
 def update_data():
     light_on_living_room()
     light_on_bedroom()
@@ -65,8 +67,17 @@ def update_data():
     
     print("Data updated successfully")
 
-while True:
-    update_data()
-    time.sleep(60)  # Attendre 1 minute avant de mettre à jour les données
+schedule.every(1).seconds.do(update_data)
+
+def run_scheduler():
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+thread = threading.Thread(target=run_scheduler, daemon=True)
+thread.start()
+
+print("Le script principal continue son exécution...")
+
 
 
