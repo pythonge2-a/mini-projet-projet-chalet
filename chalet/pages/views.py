@@ -7,7 +7,8 @@ from django.http import HttpResponse
 from django.utils import timezone
 from chalet.mqtt_client import publish_message, get_value
 from meteo.__meteo__ import load_history, get_weather_data
-import process_data as pd
+import process_data.__process__ as process_data
+import database.__database__ as db
 
 import io
 
@@ -25,13 +26,8 @@ def graph_view(request):
     with open('meteo/graphs/simple_graph.png', 'rb') as f:
         return HttpResponse(f.read(), content_type='image/png')
 
-light_status_room = False
-light_status_living = False
-light_status_kitchen = False
-light_status_bathroom = False
 @login_required
 def captors_view(request):
-    global light_status_room, light_status_living, light_status_kitchen, light_status_bathroom
     try:
         history = load_history()
         temperature_value, pressure_value, humidity_value, weather_description = get_weather_data(history, save=False)
@@ -49,32 +45,35 @@ def captors_view(request):
         weather_description = 'N/A'
         room_temp = 'N/A'
         room_humidity = 'N/A'
+
+    db.update_device_state("temperature sensor_bedroom", str(room_temp) + "°C")
+    db.update_device_state("humidity sensor_all", str(room_humidity) + "%")
     
     if request.method == 'POST':
         print("POST request received", request.POST)
-        light_status_room = request.POST.get('toggle_light_room') == 'on'
-        light_status_living = request.POST.get('toggle_light_living') == 'on'
-        light_status_kitchen = request.POST.get('toggle_light_kitchen') == 'on'
-        light_status_bathroom = request.POST.get('toggle_light_bathroom') == 'on'
+        db.update_device_state("lamp_bedroom_switch", "on" if request.POST.get('toggle_light_room') == 'on' else "off")
+        db.update_device_state("lamp_living_room_switch", "on" if request.POST.get('toggle_light_living') == 'on' else "off")
+        db.update_device_state("lamp_kitchen_switch", "on" if request.POST.get('toggle_light_kitchen') == 'on' else "off")
+        db.update_device_state("lamp_bathroom_switch", "on" if request.POST.get('toggle_light_bathroom') == 'on' else "off")
 
         if 'toggle_light_room' in request.POST:
-            print(f"Light status room: {light_status_room}")
-            publish_message('intLed/ON' if light_status_room else 'intLed/OFF')
+            print(f"Light status room: {db.get_device_state('lamp_bedroom')}")
+            publish_message('intLed/ON' if db.get_device_state('lamp_bedroom') == 1 else 'intLed/OFF')
 
     
     context = {
-        'room_temperature_value': room_temp,
-        'room_humidity_value': room_humidity,
-        'light_status_room' : light_status_room,
+        'room_temperature_value': db.get_device_state('temperature sensor_bedroom'),
+        'room_humidity_value': db.get_device_state('humidity sensor_all'),
+        'light_status_room' : db.get_device_state('lamp_bedroom_switch') == 1,
         'living_temperature_value': 22.5,
         'living_humidity_value': 50.0,
-        'light_status_living' : light_status_living,
+        'light_status_living' : db.get_device_state('lamp_living_room_switch') == 1,
         'kitchen_temperature_value': 22.5,
         'kitchen_humidity_value': 50.0,
-        'light_status_kitchen' : light_status_kitchen,
+        'light_status_kitchen' : db.get_device_state('lamp_kitchen_switch') == 1,
         'bathroom_temperature_value': 22.5,
         'bathroom_humidity_value': 50.0,
-        'light_status_bathroom' : light_status_bathroom,
+        'light_status_bathroom' : db.get_device_state('lamp_bathroom_switch') == 1,
         # Données météo extérieure
         'outside_temperature_value': temperature_value,
         'outside_pressure_value': pressure_value,
