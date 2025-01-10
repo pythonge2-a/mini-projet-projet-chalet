@@ -9,25 +9,14 @@
 
 ## Description
 
-Description du projet en quelques lignes
+Ce projet consiste à développer un système domotique simulé pour un chalet. L'objectif est de proposer une gestion automatisée et intelligente de certains équipements du chalet à partir de données externes et de critères définis. Le système est entièrement réalisé en Python et repose sur des données simulées ou récupérées en ligne.
 
 ## Cahier des charges
 
 Voir fichier `cahier-des-charges.md` dans le dossier `documentation`.
+```
 documentation
 |__cahier-des-charges.md
-
-## Installation
-
-```bash
-poetry install
-```
-
-## Utilisation
-
-TEST :
-```bash
-poetry run pytest tests/tests_unitaires.py
 ```
 
 ## Configuration serveur web
@@ -147,7 +136,7 @@ sudo reboot
 ### 1. Cloner le dépôt
 Avant de commencer, vous devez cloner le dépôt sur votre machine locale. Pour ce faire, ouvrez un terminal et exécutez la commande suivante :
 ```bash
-git clone <nom-du-dépôt>
+git clone git@github.com:pythonge2-a/mini-projet-projet-chalet.git
 ```
 
 ### 2. Installer les dépendances
@@ -162,37 +151,11 @@ Une fois les dépendances installées, vous pouvez exécuter le programme. Pour 
 poetry run chalet
 ```
 
-### 4. Utiliser l'interface
+### 4. Tests unaitaires
+Pour lancer les tests unitaires, exécutez la commande suivante :
+```bash
+poetry run pytest
+```
 
 
-## Architecture du projet
-```
-|_ `.github`  
-|_ `chalet`  
-|    |_ `__pycache__`  
-|    |_ `pages`  
-|    |_ `webServer`  
-|    |_ `__init__.py`  
-|    |_ `__main__.py`  
-|    |_ `db.sqlite3`  
-|    |_ `manage.py`  
-|    |_ `mqtt_client.py`  
-|_ `database`  
-|    |_ `__pycache__`  
-|    |_ `__database__.py`  
-|    |_ `data.db`  
-|_ `documentation`  
-|    |_ `cahier-des-charges.md`  
-|_ `meteo`  
-|    |_ `__pycache__`  
-|    |_ `graphs`  
-|    |_ `__meteo__.py`  
-|_ `process_data`  
-|    |_ `__init__.py`   
-|    |_ `__process__.py`  
-|_ `tests`  
-|    |_ `tests_unitaires.py`  
-|_ `.gitignore`  
-|_ `pyproject.toml`  
-|_ `README.md`  
-```
+
