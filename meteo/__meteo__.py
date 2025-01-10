@@ -4,6 +4,7 @@ import json
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import os
+import sched 
 
 API_KEY = "a6c1dbb02550e86bcd5e14e948c3bba3"
 LATITUDE = 46.77920475844563
@@ -165,9 +166,20 @@ def plot_weather_data(history):
     plt.savefig(file_path)
 
 
-while 0: # a mettre a 1 
+
+    
+    
+
+
+scheduler = sched.scheduler(time.time, time.sleep)
+
+def scheduled_task():
     history = load_history()
     get_weather_data(history)
     plot_weather_data(history)
     
-    time.sleep(900)  # Pause de 15 minutes avant la mise à jour suivante
+    #15 minutes
+    scheduler.enter(900, 1, scheduled_task)
+scheduler.enter(0, 1, scheduled_task)
+scheduler.run()
+
