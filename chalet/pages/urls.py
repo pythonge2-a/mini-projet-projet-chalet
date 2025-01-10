@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home_view, graph_view, captors_view, register
+from .views import home_view, graphics_view, graph_view, captors_view, register
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -7,7 +7,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     # Main pages
     path('', home_view, name='home'),
-    path('graphics/', graph_view, name='graphics'),
+    path('graphics/', graphics_view, name='graphics'),
+    path('graph/', graph_view, name='graph'),
     path('captors/', captors_view, name='captors'),
     
     # Authentication paths

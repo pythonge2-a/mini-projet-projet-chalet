@@ -3,14 +3,22 @@ from .forms import UserRegistrationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from typing import Any
+from django.http import HttpResponse
+from django.utils import timezone
+import io
 
 # Create your views here.
 def home_view(request):
     return render(request, 'home.html')
 
 @login_required
-def graph_view(request):
+def graphics_view(request):
+    context = {'timestamp' : timezone.now().timestamp()}
     return render(request, 'graphics.html')
+
+def graph_view(request):
+    with open('meteo/graphs/simple_graph.png', 'rb') as f:
+        return HttpResponse(f.read(), content_type='image/png')
 
 light_status_room = False
 light_status_living = False
