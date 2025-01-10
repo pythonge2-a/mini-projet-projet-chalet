@@ -12,7 +12,7 @@ import threading
 API_KEY = "a6c1dbb02550e86bcd5e14e948c3bba3"
 LATITUDE = 46.77920475844563
 LONGITUDE = 6.6589111250491975
-HISTORICAL_FILE = "meteo/historical_weather_data.json"  # Nom du fichier pour stocker les données
+HISTORICAL_FILE = "./chalet/meteo/historical_weather_data.json"  # Nom du fichier pour stocker les données
 GRAPH_FOLDER = "meteo/graphs"  # Dossier pour les graphiques
 file_path = os.path.join(GRAPH_FOLDER, "simple_graph.png")
 
@@ -35,6 +35,7 @@ def load_history():
 def save_history(data):
     with open(HISTORICAL_FILE, "w") as file:
         json.dump(data, file, indent=4)
+    print("Historical data saved successfully")
 
 
 def get_weather_data(history, save=True):
@@ -199,6 +200,4 @@ def start_scheduler():
     scheduler.enter(0, 1, scheduled_task)
     scheduler.run()
 
-scheduler_thread = threading.Thread(target=start_scheduler)
-scheduler_thread.daemon = True
-scheduler_thread.start()
+

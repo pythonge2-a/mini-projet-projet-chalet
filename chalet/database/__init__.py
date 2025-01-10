@@ -43,8 +43,19 @@ class Database:
                     FOREIGN KEY (device_id) REFERENCES devices (id)
                 )
             ''')
+            # Create history table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS history (
+                    id INTEGER PRIMARY KEY,
+                    date TEXT NOT NULL,
+                    temperature REAL,
+                    pressure REAL,
+                    humidity REAL,
+                    weather_condition TEXT
+                )
+            ''')
             print("Tables created successfully")
-        except Error as e: # Quelle exception est attrapée ici ?
+        except Error as e:
             print(f"Error creating the tables: {e}")
 
     def insert_data(self):
@@ -69,9 +80,9 @@ class Database:
                 ('heater_rest_of_chalet', 0),
                 ('skylight_living_room', 0),
                 ('luminosity_living_room', 0),
-                ('temperature sensor_bedroom', 18),
-                ('temperature sensor_rest_of_chalet', 20),
-                ('humidity sensor_all', 45),
+                ('temperature sensor_bedroom', 0),
+                ('temperature sensor_rest_of_chalet', 0),
+                ('humidity sensor_all', 0),
                 ('lamp_bedroom_switch',0),
                 ('lamp_bathroom_switch', 0),
                 ('lamp_living_room_switch', 0),
@@ -123,15 +134,7 @@ class Database:
         cursor.execute('UPDATE devices SET state = ? WHERE type = ?', (new_state, device_type))
         self.connection.commit()
 
-    def clear_database(self):
-        """Clear all data from the database."""
-        cursor = self.connection.cursor()
-        cursor.execute('DELETE FROM room_devices')
-        cursor.execute('DELETE FROM devices')
-        cursor.execute('DELETE FROM rooms')
-        cursor.execute('DELETE FROM history')
-        self.connection.commit()
-        print("Database cleared") 
+
 
     def close_connection(self):
         if self.connection:
@@ -141,13 +144,3 @@ class Database:
  
 DB_FILE = os.path.join(os.path.dirname(__file__), 'data.db')
 
-db = Database(DB_FILE)
-
-
-
-if db.connection is not None:
-    db.create_tables()
-    db.insert_data()
-    db.close_connection()
-else:
-    print("Failed to create the database connection")
