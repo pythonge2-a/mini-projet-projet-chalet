@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from typing import Any
 from django.http import HttpResponse
 from django.utils import timezone
+from chalet.mqtt_client import publish_message
 import io
 
 # Create your views here.
@@ -16,6 +17,7 @@ def graphics_view(request):
     context = {'timestamp' : timezone.now().timestamp()}
     return render(request, 'graphics.html')
 
+@login_required
 def graph_view(request):
     with open('meteo/graphs/simple_graph.png', 'rb') as f:
         return HttpResponse(f.read(), content_type='image/png')
@@ -30,18 +32,19 @@ def captors_view(request):
     try:
         temperature_value = 22.5  # Remplacez par la méthode réelle pour obtenir la valeur du capteur
         humidity_value = 50.0  # Remplacez par la méthode réelle pour obtenir la valeur du capteur
-        co2_value = 400  # Remplacez par la méthode réelle pour obtenir la valeur du capteur
     except Exception as e:
         print(f"Error: {e}")
         temperature_value = 'Erreur de récupération des données'
         humidity_value = 'Erreur de récupération des données'
-        co2_value = 'Erreur de récupération des données'
     
     if request.method == 'POST':
         light_status_room = 'toggle_light_room' in request.POST
         light_status_living = 'toggle_light_living' in request.POST
         light_status_kitchen = 'toggle_light_kitchen' in request.POST
         light_status_bathroom = 'toggle_light_bathroom' in request.POST
+
+        publish_message('intLed/ON' if light_status_room else 'intLed/OFF')
+
     
     context = {
         'room_temperature_value': 22.5,

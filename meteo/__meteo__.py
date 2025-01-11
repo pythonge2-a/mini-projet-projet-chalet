@@ -171,7 +171,7 @@ def plot_weather_data(history):
     
 
 
-scheduler = sched.scheduler(time.time, time.sleep)
+"""scheduler = sched.scheduler(time.time, time.sleep)
 
 def scheduled_task():
     history = load_history()
@@ -179,7 +179,7 @@ def scheduled_task():
     plot_weather_data(history)
     
     #15 minutes
-    scheduler.enter(900, 1, scheduled_task)
+    scheduler.enter(1, 1, scheduled_task)
 scheduler.enter(0, 1, scheduled_task)
-scheduler.run()
+scheduler.run()"""
 
