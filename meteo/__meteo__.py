@@ -18,8 +18,13 @@ file_path = os.path.join(GRAPH_FOLDER, "simple_graph.png")
 def load_history():
     try:
         with open(HISTORICAL_FILE, "r") as file:
-            history = json.load(file)
-            return history
+            try:
+                history = json.load(file)
+                return history
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON: {e}")
+                # Si le fichier est corrompu, renvoyer un dictionnaire vide
+                return {}
     except FileNotFoundError:
         # Si le fichier n'existe pas encore, retourner un dictionnaire vide
         return {}
