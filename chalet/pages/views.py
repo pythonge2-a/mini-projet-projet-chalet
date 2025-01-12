@@ -43,6 +43,7 @@ def captors_view(request):
         weather_description = 'Erreur de récupération des données'
     
     if request.method == 'POST':
+        print("POST request received", request.POST)
         light_status_room = 'toggle_light_room' in request.POST
         light_status_living = 'toggle_light_living' in request.POST
         light_status_kitchen = 'toggle_light_kitchen' in request.POST

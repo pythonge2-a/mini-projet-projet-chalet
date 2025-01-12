@@ -168,6 +168,7 @@ def plot_weather_data(history):
     # Sauvegarder le graphique
     plt.tight_layout()
     plt.savefig(file_path)
+    plt.close(fig)  # Fermer la figure pour libérer la mémoire
 
 scheduler = sched.scheduler(time.time, time.sleep)
 

@@ -194,7 +194,7 @@
 
 <script>
     function submitForm(element) {
-        const form = element.closet('form');
+        const form = element.closest('form');
         const formData = new FormData(form);
         fetch(form.action, {
             method: 'POST',
