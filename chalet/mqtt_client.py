@@ -23,6 +23,12 @@ def connect():
 
 def publish_message(message):
     try:
-        client.publish(MQTT_TOPIC, message)
+        print(f"Publishing message: {message}")
+        result = client.publish(MQTT_TOPIC, message)
+        status = result[0]
+        if status == 0:
+            print(f"Message published successfully.")
+        else:
+            print(f"Failed to publish message.")
     except Exception as e:
         print(f"Error: {e}")

@@ -49,6 +49,7 @@ def captors_view(request):
         light_status_bathroom = 'toggle_light_bathroom' in request.POST
 
         if 'toggle_light_room' in request.POST:
+            print(f"Light status room: {light_status_room}")
             publish_message('intLed/ON' if light_status_room else 'intLed/OFF')
 
     
