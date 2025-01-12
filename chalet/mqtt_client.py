@@ -7,13 +7,22 @@ MQTT_TOPIC = 'pico/leds/control'
 client = mqtt.Client()
 
 def on_connect(client, userdata, flags, rc):
-    print("Connected with result code "+str(rc))
+    if rc == 0:
+        print("Connected with result code "+str(rc))
+    else:
+        print("Bad connection Returned code=", rc)
 
 client.on_connect = on_connect
 
 def connect():
-    client.connect(MQTT_BROKER, MQTT_PORT, 60)
-    client.loop_start()
+    try:
+        client.connect(MQTT_BROKER, MQTT_PORT, 60)
+        client.loop_start()
+    except Exception as e:
+        print(f"Error: {e}")
 
 def publish_message(message):
-    client.publish(MQTT_TOPIC, message)
+    try:
+        client.publish(MQTT_TOPIC, message)
+    except Exception as e:
+        print(f"Error: {e}")

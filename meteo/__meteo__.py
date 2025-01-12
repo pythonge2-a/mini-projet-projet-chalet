@@ -4,7 +4,8 @@ import json
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import os
-import sched 
+import sched
+import threading
 
 API_KEY = "a6c1dbb02550e86bcd5e14e948c3bba3"
 LATITUDE = 46.77920475844563
@@ -69,9 +70,12 @@ def get_weather_data(history):
         history = {day: data for day, data in history.items() if day >= date_limit}
         
         save_history(history)
+
+        return temperature, pressure, humidity, weather_description
         
     else:
         print("Erreur lors de la récupération des données météo.")
+        return None, None, None, None
 
 def plot_weather_data(history):
     all_temperatures = []
@@ -165,13 +169,7 @@ def plot_weather_data(history):
     plt.tight_layout()
     plt.savefig(file_path)
 
-
-
-    
-    
-
-
-"""scheduler = sched.scheduler(time.time, time.sleep)
+scheduler = sched.scheduler(time.time, time.sleep)
 
 def scheduled_task():
     history = load_history()
@@ -180,6 +178,11 @@ def scheduled_task():
     
     #15 minutes
     scheduler.enter(1, 1, scheduled_task)
-scheduler.enter(0, 1, scheduled_task)
-scheduler.run()"""
 
+def start_scheduler():
+    scheduler.enter(0, 1, scheduled_task)
+    scheduler.run()
+
+scheduler_thread = threading.Thread(target=start_scheduler)
+scheduler_thread.daemon = True
+scheduler_thread.start()

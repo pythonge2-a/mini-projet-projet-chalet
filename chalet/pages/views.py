@@ -6,6 +6,7 @@ from typing import Any
 from django.http import HttpResponse
 from django.utils import timezone
 from chalet.mqtt_client import publish_message
+from meteo.__meteo__ import load_history, get_weather_data
 import io
 
 # Create your views here.
@@ -30,12 +31,16 @@ light_status_bathroom = False
 def captors_view(request):
     global light_status_room, light_status_living, light_status_kitchen, light_status_bathroom
     try:
-        temperature_value = 22.5  # Remplacez par la méthode réelle pour obtenir la valeur du capteur
-        humidity_value = 50.0  # Remplacez par la méthode réelle pour obtenir la valeur du capteur
+        history = load_history()
+        temperature_value, pressure_value, humidity_value, weather_description = get_weather_data(history)
+        if temperature_value is None or humidity_value is None or pressure_value is None or weather_description is None:
+            raise Exception('Error while getting weather data')
     except Exception as e:
         print(f"Error: {e}")
         temperature_value = 'Erreur de récupération des données'
+        pressure_value = 'Erreur de récupération des données'
         humidity_value = 'Erreur de récupération des données'
+        weather_description = 'Erreur de récupération des données'
     
     if request.method == 'POST':
         light_status_room = 'toggle_light_room' in request.POST
@@ -43,7 +48,8 @@ def captors_view(request):
         light_status_kitchen = 'toggle_light_kitchen' in request.POST
         light_status_bathroom = 'toggle_light_bathroom' in request.POST
 
-        publish_message('intLed/ON' if light_status_room else 'intLed/OFF')
+        if 'toggle_light_room' in request.POST:
+            publish_message('intLed/ON' if light_status_room else 'intLed/OFF')
 
     
     context = {
@@ -59,8 +65,10 @@ def captors_view(request):
         'bathroom_temperature_value': 22.5,
         'bathroom_humidity_value': 50.0,
         'light_status_bathroom' : light_status_bathroom,
-        'outside_temperature_value': 15,
-        'outside_humidity_value': 60.0,
+        'outside_temperature_value': temperature_value,
+        'outside_pressure_value': pressure_value,
+        'outside_humidity_value': humidity_value,
+        'outside_weather' : weather_description,
     }
     return render(request, 'captors.html', context)
 
