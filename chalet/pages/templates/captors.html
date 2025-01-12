@@ -31,6 +31,7 @@
                     <h2 class="card-title">Lumière</h2>
                     <form method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="toggle_light_room" value="off">
                         <label class="switch">
                             <input type="checkbox" name="toggle_light_room" onchange="submitForm(this)" {% if light_status_room %}checked{% endif %}>
                             <span class="slider round"></span>

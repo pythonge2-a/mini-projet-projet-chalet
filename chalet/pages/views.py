@@ -44,10 +44,10 @@ def captors_view(request):
     
     if request.method == 'POST':
         print("POST request received", request.POST)
-        light_status_room = 'toggle_light_room' in request.POST
-        light_status_living = 'toggle_light_living' in request.POST
-        light_status_kitchen = 'toggle_light_kitchen' in request.POST
-        light_status_bathroom = 'toggle_light_bathroom' in request.POST
+        light_status_room = request.POST.get('toggle_light_room') == 'on'
+        light_status_living = request.POST.get('toggle_light_living') == 'on'
+        light_status_kitchen = request.POST.get('toggle_light_kitchen') == 'on'
+        light_status_bathroom = request.POST.get('toggle_light_bathroom') == 'on'
 
         if 'toggle_light_room' in request.POST:
             print(f"Light status room: {light_status_room}")
