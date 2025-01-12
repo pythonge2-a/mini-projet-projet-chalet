@@ -32,7 +32,7 @@ def captors_view(request):
     global light_status_room, light_status_living, light_status_kitchen, light_status_bathroom
     try:
         history = load_history()
-        temperature_value, pressure_value, humidity_value, weather_description = get_weather_data(history)
+        temperature_value, pressure_value, humidity_value, weather_description = get_weather_data(history, save=False)
         if temperature_value is None or humidity_value is None or pressure_value is None or weather_description is None:
             raise Exception('Error while getting weather data')
     except Exception as e:

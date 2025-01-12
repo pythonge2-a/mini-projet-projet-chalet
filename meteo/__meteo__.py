@@ -35,7 +35,7 @@ def save_history(data):
         json.dump(data, file, indent=4)
 
 
-def get_weather_data(history):
+def get_weather_data(history, save=True):
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={LATITUDE}&lon={LONGITUDE}&appid={API_KEY}&units=metric"
     
     response = requests.get(url)
@@ -74,7 +74,8 @@ def get_weather_data(history):
         
         history = {day: data for day, data in history.items() if day >= date_limit}
         
-        save_history(history)
+        if save:
+            save_history(history)
 
         return temperature, pressure, humidity, weather_description
         
@@ -179,7 +180,7 @@ scheduler = sched.scheduler(time.time, time.sleep)
 
 def scheduled_task():
     history = load_history()
-    get_weather_data(history)
+    get_weather_data(history, save=True)
     plot_weather_data(history)
     
     #15 minutes
