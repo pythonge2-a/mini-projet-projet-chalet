@@ -7,6 +7,7 @@
     <div class="card-body">
         <h2 class="card-title">Bienvenue sur la page Graphics</h2>
         <p class="card-text">Voici le contenu spécifique à la page Graphics</p>
+        <img src="{% url 'graph' %}?{{ timestamp }}" alt="Graphique">
     </div>
 </div>
 {% endblock %}

@@ -12,6 +12,9 @@ matplotlib = "^3.9.4"
 requests = "^2.32.3"
 django = "^5.1.4"
 django-crispy-forms = "^2.3"
+numpy = "1.25.2"
+paho-mqtt = "^2.1.0"
+crispy-bootstrap4 = "^2024.10"
 
 [build-system]
 requires = ["poetry-core"]

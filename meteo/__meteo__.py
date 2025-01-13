@@ -4,7 +4,8 @@ import json
 from datetime import datetime, timedelta
 import matplotlib.pyplot as plt
 import os
-import sched 
+import sched
+import threading
 
 API_KEY = "a6c1dbb02550e86bcd5e14e948c3bba3"
 LATITUDE = 46.77920475844563
@@ -17,8 +18,13 @@ file_path = os.path.join(GRAPH_FOLDER, "simple_graph.png")
 def load_history():
     try:
         with open(HISTORICAL_FILE, "r") as file:
-            history = json.load(file)
-            return history
+            try:
+                history = json.load(file)
+                return history
+            except json.JSONDecodeError as e:
+                print(f"Error decoding JSON: {e}")
+                # Si le fichier est corrompu, renvoyer un dictionnaire vide
+                return {}
     except FileNotFoundError:
         # Si le fichier n'existe pas encore, retourner un dictionnaire vide
         return {}
@@ -29,7 +35,7 @@ def save_history(data):
         json.dump(data, file, indent=4)
 
 
-def get_weather_data(history):
+def get_weather_data(history, save=True):
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={LATITUDE}&lon={LONGITUDE}&appid={API_KEY}&units=metric"
     
     response = requests.get(url)
@@ -68,10 +74,14 @@ def get_weather_data(history):
         
         history = {day: data for day, data in history.items() if day >= date_limit}
         
-        save_history(history)
+        if save:
+            save_history(history)
+
+        return temperature, pressure, humidity, weather_description
         
     else:
         print("Erreur lors de la récupération des données météo.")
+        return None, None, None, None
 
 def plot_weather_data(history):
     all_temperatures = []
@@ -164,22 +174,22 @@ def plot_weather_data(history):
     # Sauvegarder le graphique
     plt.tight_layout()
     plt.savefig(file_path)
-
-
-
-    
-    
-
+    plt.close(fig)  # Fermer la figure pour libérer la mémoire
 
 scheduler = sched.scheduler(time.time, time.sleep)
 
 def scheduled_task():
     history = load_history()
-    get_weather_data(history)
+    get_weather_data(history, save=True)
     plot_weather_data(history)
     
     #15 minutes
-    scheduler.enter(900, 1, scheduled_task)
-scheduler.enter(0, 1, scheduled_task)
-scheduler.run()
+    scheduler.enter(1, 1, scheduled_task)
 
+def start_scheduler():
+    scheduler.enter(0, 1, scheduled_task)
+    scheduler.run()
+
+scheduler_thread = threading.Thread(target=start_scheduler)
+scheduler_thread.daemon = True
+scheduler_thread.start()

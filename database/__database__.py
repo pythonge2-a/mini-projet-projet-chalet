@@ -1,5 +1,6 @@
 import sqlite3
 from sqlite3 import Error
+import os
 
 class Database:
     def __init__(self, db_file):
@@ -120,7 +121,7 @@ class Database:
             self.connection.close()
             print("Connection closed")
 
-db_file = "/home/alexis_lantier/mini-projet-projet-chalet/database/data.db"
+db_file = os.path.join(os.path.dirname(__file__), 'data.db')
 db = Database(db_file)
 
 if db.connection is not None:

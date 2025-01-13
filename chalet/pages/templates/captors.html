@@ -31,6 +31,7 @@
                     <h2 class="card-title">Lumière</h2>
                     <form method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="toggle_light_room" value="off">
                         <label class="switch">
                             <input type="checkbox" name="toggle_light_room" onchange="submitForm(this)" {% if light_status_room %}checked{% endif %}>
                             <span class="slider round"></span>
@@ -168,8 +169,24 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
+                    <h2 class="card-title">Pression</h2>
+                    <p class="card-text">{{ outside_pressure_value }}hPa</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
                     <h2 class="card-title">Humidité</h2>
                     <p class="card-text">{{ outside_humidity_value }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Météo</h2>
+                    <p class="card-text">{{ outside_weather }}</p>
                 </div>
             </div>
         </div>
@@ -178,7 +195,7 @@
 
 <script>
     function submitForm(element) {
-        const form = element.closet('form');
+        const form = element.closest('form');
         const formData = new FormData(form);
         fetch(form.action, {
             method: 'POST',
