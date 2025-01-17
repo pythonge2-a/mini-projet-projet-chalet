@@ -193,7 +193,7 @@ def scheduled_task():
     plot_weather_data(history)
     
     #15 minutes
-    scheduler.enter(1, 1, scheduled_task)
+    scheduler.enter(900, 1, scheduled_task)
 
 def start_scheduler():
     scheduler.enter(0, 1, scheduled_task)
