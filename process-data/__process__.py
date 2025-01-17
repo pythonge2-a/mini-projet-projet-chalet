@@ -3,27 +3,28 @@
 #
 
 import database as db
+import time
 
 def light_on_living_room():
-    if db.get_device_state('luminosity_living_room') < 100:    # 100 lux
+    if db.get_device_state('lamp_living_room_switch'):    
         db.update_device_state('lamp_living_room', 'on')
     else:
         db.update_device_state('lamp_living_room', 'off')
         
 def light_on_bedroom():
-    if db.get_device_state('luminosity_bedroom') < 100:    # 100 lux
+    if db.get_device_state('lamp_bedroom_switch'):    
         db.update_device_state('lamp_bedroom', 'on')
     else:
         db.update_device_state('lamp_bedroom', 'off')
         
 def light_on_kitchen():
-    if db.get_device_state('luminosity_kitchen') < 100:    # 100 lux
+    if db.get_device_state('lamp_kitchen_switch'):    
         db.update_device_state('lamp_kitchen', 'on')
     else:
         db.update_device_state('lamp_kitchen', 'off')
         
 def light_on_bathroom():
-    if db.get_device_state('luminosity_bathroom') < 100:    # 100 lux
+    if db.get_device_state('lamp_bathroom_switch'):    
         db.update_device_state('lamp_bathroom', 'on')
     else:
         db.update_device_state('lamp_bathroom', 'off')
@@ -64,6 +65,8 @@ def update_data():
     
     print("Data updated successfully")
 
-
+while True:
+    update_data()
+    time.sleep(60)  # Attendre 1 minute avant de mettre à jour les données
 
 
