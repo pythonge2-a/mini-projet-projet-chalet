@@ -10,4 +10,26 @@
         <img src="{% url 'graph' %}?{{ timestamp }}" alt="Graphique">
     </div>
 </div>
+<script>
+    let lastModified = '';
+
+    async function checkAndUpdateImage() {
+        try {
+            const response = await fetch("{% url 'graph' %}");
+            const currentModified = response.headers.get('last-modified');
+            
+            if (currentModified !== lastModified) {
+                lastModified = currentModified;
+                document.getElementById('weatherGraph').src = "{% url 'graph' %}?" + new Date().getTime();
+            }
+        } catch (error) {
+            console.error('Error checking image:', error);
+        }
+    }
+
+    // Check every 15 seconds
+    setInterval(checkAndUpdateImage, 15000);
+    // Initial check
+    checkAndUpdateImage();
+</script>
 {% endblock %}
