@@ -67,6 +67,5 @@ def update_data():
 
 while True:
     update_data()
-    time.sleep(60)  # Attendre 1 minute avant de mettre à jour les données
 
 
