@@ -6,7 +6,7 @@ from database import __database__ as db
 @pytest.fixture
 def setup_database():
     # Setup: Create a test database and insert initial data
-    db_file = "/home/alexis_lantier/mini-projet-projet-chalet/tests/test_data.db"
+    db_file = "./tests/test_data.db"
     database = db.Database(db_file)
     database.create_tables()
     database.insert_data()
