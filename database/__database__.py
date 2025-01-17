@@ -71,7 +71,11 @@ class Database:
                 ('luminosity_living_room', 'normal'),
                 ('temperature sensor_bedroom', '18°C'),
                 ('temperature sensor_rest_of_chalet', '20°C'),
-                ('humidity sensor_all', '45%')
+                ('humidity sensor_all', '45%'),
+                ('lamp_bedroom_switch', 'off'),
+                ('lamp_bathroom_switch', 'off'),
+                ('lamp_living_room_switch', 'off'),
+                ('lamp_kitchen_switch', 'off'),
             ]
             cursor.executemany('INSERT INTO devices (type, state) VALUES (?, ?)', devices)
             
@@ -94,7 +98,11 @@ class Database:
                 (1, 11), # bedroom -> humidity sensor_all
                 (2, 11), # bathroom -> humidity sensor_all
                 (3, 11), # living room -> humidity sensor_all
-                (4, 11)  # kitchen -> humidity sensor_all
+                (4, 11),  # kitchen -> humidity sensor_all
+                (1, 12), # bedroom -> lamp_bedroom_switch
+                (2, 13), # bathroom -> lamp_bathroom_switch
+                (3, 14), # living room -> lamp_living_room_switch
+                (4, 15)  # kitchen -> lamp_kitchen_switch
             ]
             cursor.executemany('INSERT INTO room_devices (room_id, device_id) VALUES (?, ?)', room_devices)
             
@@ -102,7 +110,6 @@ class Database:
             print("Data inserted successfully")
         except Error as e:
             print(f"Error inserting data: {e}")
-
     def get_device_state(self, device_type):
         """Get the state of a device by its type."""
         cursor = self.connection.cursor()
@@ -121,6 +128,9 @@ class Database:
             self.connection.close()
             print("Connection closed")
 
+ 
+
+
 db_file = os.path.join(os.path.dirname(__file__), 'data.db')
 db = Database(db_file)
 
@@ -128,10 +138,7 @@ if db.connection is not None:
     db.create_tables()
     db.insert_data()
     
-    # Example: Get the state of 'lamp_living_room'
-    lamp_state = db.get_device_state('lamp_living_room')
-    print(f"State of 'lamp_living_room': {lamp_state}")
-    
+        
     # Close the connection
     db.close_connection()
 else:
