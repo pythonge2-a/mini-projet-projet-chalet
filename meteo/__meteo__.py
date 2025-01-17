@@ -2,6 +2,8 @@ import requests
 import time
 import json
 from datetime import datetime, timedelta
+import matplotlib
+matplotlib.use('Agg')  # Configure Matplotlib to use the 'Agg' backend
 import matplotlib.pyplot as plt
 import os
 import sched
@@ -38,49 +40,56 @@ def save_history(data):
 def get_weather_data(history, save=True):
     url = f"http://api.openweathermap.org/data/2.5/weather?lat={LATITUDE}&lon={LONGITUDE}&appid={API_KEY}&units=metric"
     
-    response = requests.get(url)
-    
-    if response.status_code == 200:
-        data = response.json()
+    try:
+        response = requests.get(url, timeout=10)
         
-        temperature = data['main']['temp']
-        pressure = data['main']['pressure']
-        humidity = data['main']['humidity']
-        weather_description = data['weather'][0]['description']
-        timestamp = time.time()  # Obtenir le timestamp actuel
-        
-        # Obtenir la date actuelle pour associer les données à un jour spécifique
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        
-        # Ajouter les nouvelles données dans l'historique pour cette date
-        if current_date not in history:
-            history[current_date] = {
-                "temperatures": [],
-                "pressures": [],
-                "humidities": [],
-                "weather_conditions": [],
-                "timestamps": []
-            }
-        
-        history[current_date]["temperatures"].append(temperature)
-        history[current_date]["pressures"].append(pressure)
-        history[current_date]["humidities"].append(humidity)
-        history[current_date]["weather_conditions"].append(weather_description)
-        history[current_date]["timestamps"].append(timestamp)
-        
-        seven_days_ago = datetime.now() - timedelta(days=7)
-        date_limit = seven_days_ago.strftime("%Y-%m-%d")
-        
-        
-        history = {day: data for day, data in history.items() if day >= date_limit}
-        
-        if save:
-            save_history(history)
+        if response.status_code == 200:
+            data = response.json()
+            
+            temperature = data['main']['temp']
+            pressure = data['main']['pressure']
+            humidity = data['main']['humidity']
+            weather_description = data['weather'][0]['description']
+            timestamp = time.time()  # Obtenir le timestamp actuel
+            
+            # Obtenir la date actuelle pour associer les données à un jour spécifique
+            current_date = datetime.now().strftime("%Y-%m-%d")
+            
+            # Ajouter les nouvelles données dans l'historique pour cette date
+            if current_date not in history:
+                history[current_date] = {
+                    "temperatures": [],
+                    "pressures": [],
+                    "humidities": [],
+                    "weather_conditions": [],
+                    "timestamps": []
+                }
+            
+            history[current_date]["temperatures"].append(temperature)
+            history[current_date]["pressures"].append(pressure)
+            history[current_date]["humidities"].append(humidity)
+            history[current_date]["weather_conditions"].append(weather_description)
+            history[current_date]["timestamps"].append(timestamp)
+            
+            seven_days_ago = datetime.now() - timedelta(days=7)
+            date_limit = seven_days_ago.strftime("%Y-%m-%d")
+            
+            
+            history = {day: data for day, data in history.items() if day >= date_limit}
+            
+            if save:
+                save_history(history)
 
-        return temperature, pressure, humidity, weather_description
-        
-    else:
-        print("Erreur lors de la récupération des données météo.")
+            return temperature, pressure, humidity, weather_description
+            
+        else:
+            print("Erreur lors de la récupération des données météo.")
+            return None, None, None, None
+    except requests.exceptions.Timeout:
+        print("Request timed out")
+        return None, None, None, None
+    except Exception as e:
+        print(f"Error meteo: {e}")
         return None, None, None, None
 
 def plot_weather_data(history):
