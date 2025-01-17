@@ -25,6 +25,14 @@ Description du projet en quelques lignes
 poetry install
 ```
 
+## Utilisation
+
+TEST :
+```bash
+pytest tests/tests_unitaires.py
+```
+
+
 ## (Pour les étudiants, à supprimer une fois fait)
 
 ### Comment créer le module
