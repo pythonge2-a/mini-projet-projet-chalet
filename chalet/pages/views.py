@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required
 from typing import Any
 from django.http import HttpResponse
 from django.utils import timezone
-from chalet.mqtt_client import publish_message
+from chalet.mqtt_client import publish_message, get_value
 from meteo.__meteo__ import load_history, get_weather_data
+
 import io
 
 # Create your views here.
@@ -35,12 +36,18 @@ def captors_view(request):
         temperature_value, pressure_value, humidity_value, weather_description = get_weather_data(history, save=False)
         if temperature_value is None or humidity_value is None or pressure_value is None or weather_description is None:
             raise Exception('Error while getting weather data')
+        room_temp = get_value("capteur/temperature")
+        room_humidity = get_value("capteur/humidite")
+        if room_temp is None or room_humidity is None:
+            raise Exception('Error while getting room data')
     except Exception as e:
         print(f"Error: {e}")
         temperature_value = 'Erreur de récupération des données'
         pressure_value = 'Erreur de récupération des données'
         humidity_value = 'Erreur de récupération des données'
         weather_description = 'Erreur de récupération des données'
+        room_temp = 'Erreur de récupération des données'
+        room_humidity = 'Erreur de récupération des données'
     
     if request.method == 'POST':
         print("POST request received", request.POST)
@@ -55,8 +62,8 @@ def captors_view(request):
 
     
     context = {
-        'room_temperature_value': 22.5,
-        'room_humidity_value': 50.0,
+        'room_temperature_value': room_temp,
+        'room_humidity_value': room_humidity,
         'light_status_room' : light_status_room,
         'living_temperature_value': 22.5,
         'living_humidity_value': 50.0,
@@ -67,6 +74,7 @@ def captors_view(request):
         'bathroom_temperature_value': 22.5,
         'bathroom_humidity_value': 50.0,
         'light_status_bathroom' : light_status_bathroom,
+        # Données météo extérieure
         'outside_temperature_value': temperature_value,
         'outside_pressure_value': pressure_value,
         'outside_humidity_value': humidity_value,
