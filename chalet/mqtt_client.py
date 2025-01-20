@@ -15,7 +15,13 @@ client = mqtt.Client()
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         print("Connected with result code "+str(rc))
+        # Subscribe to topics
         client.subscribe("capteur/#")
+        print("Subscribed to capteur/#")
+        # Add client to connected clients
+        client_id = client._client_id.decode()
+        connected_clients.add(client_id)
+        print_connected_clients()
     else:
         print("Bad connection Returned code=", rc)
 
@@ -26,11 +32,6 @@ def on_message(client, userdata, msg):
         print(f"Received {msg.topic}: {value}")
     except Exception as e:
         print(f"Error processing message: {e}")
-
-def on_client_connect(client, userdata, flags, rc):
-    client_id = client._client_id.decode()
-    connected_clients.add(client_id)
-    print_connected_clients()
 
 def on_client_disconnect(client, userdata, rc):
     client_id = client._client_id.decode()
@@ -50,7 +51,6 @@ def print_connected_clients():
 
 client.on_connect = on_connect
 client.on_message = on_message
-client.on_connect = on_client_connect
 client.on_disconnect = on_client_disconnect
 
 def connect():
@@ -77,7 +77,10 @@ def get_value(mqtt_topic):
         value = mqtt_values.get(mqtt_topic)
         print(f"Value: {value}")
         if value is not None:
-            return float(value)
+            try:
+                return float(value)
+            except ValueError:
+                return value
         return None
     except ValueError:
         return value
