@@ -75,7 +75,6 @@ def publish_message(message):
 def get_value(mqtt_topic):
     try:
         value = mqtt_values.get(mqtt_topic)
-        print(f"Value: {value}")
         if value is not None:
             try:
                 return float(value)
