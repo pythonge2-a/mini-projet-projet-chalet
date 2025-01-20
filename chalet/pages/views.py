@@ -42,12 +42,12 @@ def captors_view(request):
             raise Exception('Error while getting room data')
     except Exception as e:
         print(f"Error: {e}")
-        temperature_value = 'Erreur de récupération des données'
-        pressure_value = 'Erreur de récupération des données'
-        humidity_value = 'Erreur de récupération des données'
-        weather_description = 'Erreur de récupération des données'
-        room_temp = 'Erreur de récupération des données'
-        room_humidity = 'Erreur de récupération des données'
+        temperature_value = 'N/A'
+        pressure_value = 'N/A'
+        humidity_value = 'N/A'
+        weather_description = 'N/A'
+        room_temp = 'N/A'
+        room_humidity = 'N/A'
     
     if request.method == 'POST':
         print("POST request received", request.POST)
