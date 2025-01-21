@@ -61,21 +61,21 @@ class Database:
             
             # Insert devices
             devices = [
-                ('lamp_bedroom', 'off'),
-                ('lamp_bathroom', 'off'),
-                ('lamp_living_room', 'off'),
-                ('lamp_kitchen', 'off'),
-                ('heater_bedroom', 'off'),
-                ('heater_rest_of_chalet', '0'),
-                ('skylight_living_room', 'closed'),
-                ('luminosity_living_room', 'normal'),
-                ('temperature sensor_bedroom', '18°C'),
-                ('temperature sensor_rest_of_chalet', '20°C'),
-                ('humidity sensor_all', '45%'),
-                ('lamp_bedroom_switch', 'off'),
-                ('lamp_bathroom_switch', 'off'),
-                ('lamp_living_room_switch', 'off'),
-                ('lamp_kitchen_switch', 'off'),
+                ('lamp_bedroom', 0),
+                ('lamp_bathroom', 0),
+                ('lamp_living_room', 0),
+                ('lamp_kitchen', 0),
+                ('heater_bedroom', 0),
+                ('heater_rest_of_chalet', 0),
+                ('skylight_living_room', 0),
+                ('luminosity_living_room', 0),
+                ('temperature sensor_bedroom', 18),
+                ('temperature sensor_rest_of_chalet', 20),
+                ('humidity sensor_all', 45),
+                ('lamp_bedroom_switch',0),
+                ('lamp_bathroom_switch', 0),
+                ('lamp_living_room_switch', 0),
+                ('lamp_kitchen_switch', 0),
             ]
             cursor.executemany('INSERT INTO devices (type, state) VALUES (?, ?)', devices)
             
