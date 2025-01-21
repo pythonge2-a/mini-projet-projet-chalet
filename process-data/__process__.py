@@ -67,7 +67,7 @@ def update_data():
     
     print("Data updated successfully")
 
-schedule.every(1).seconds.do(update_data)
+schedule.every(0.1).seconds.do(update_data)
 
 def run_scheduler():
     while True:
