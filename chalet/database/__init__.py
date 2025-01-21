@@ -44,7 +44,7 @@ class Database:
                 )
             ''')
             print("Tables created successfully")
-        except Error as e:
+        except Error as e: # Quelle exception est attrapée ici ?
             print(f"Error creating the tables: {e}")
 
     def insert_data(self):
@@ -61,21 +61,21 @@ class Database:
             
             # Insert devices
             devices = [
-                ('lamp_bedroom', 'off'),
-                ('lamp_bathroom', 'off'),
-                ('lamp_living_room', 'off'),
-                ('lamp_kitchen', 'off'),
-                ('heater_bedroom', 'off'),
-                ('heater_rest_of_chalet', '0'),
-                ('skylight_living_room', 'closed'),
-                ('luminosity_living_room', 'normal'),
-                ('temperature sensor_bedroom', '18°C'),
-                ('temperature sensor_rest_of_chalet', '20°C'),
-                ('humidity sensor_all', '45%'),
-                ('lamp_bedroom_switch', 'off'),
-                ('lamp_bathroom_switch', 'off'),
-                ('lamp_living_room_switch', 'off'),
-                ('lamp_kitchen_switch', 'off'),
+                ('lamp_bedroom', 0),
+                ('lamp_bathroom', 0),
+                ('lamp_living_room', 0),
+                ('lamp_kitchen', 0),
+                ('heater_bedroom', 0),
+                ('heater_rest_of_chalet', 0),
+                ('skylight_living_room', 0),
+                ('luminosity_living_room', 0),
+                ('temperature sensor_bedroom', 18),
+                ('temperature sensor_rest_of_chalet', 20),
+                ('humidity sensor_all', 45),
+                ('lamp_bedroom_switch',0),
+                ('lamp_bathroom_switch', 0),
+                ('lamp_living_room_switch', 0),
+                ('lamp_kitchen_switch', 0),
             ]
             cursor.executemany('INSERT INTO devices (type, state) VALUES (?, ?)', devices)
             
@@ -123,23 +123,31 @@ class Database:
         cursor.execute('UPDATE devices SET state = ? WHERE type = ?', (new_state, device_type))
         self.connection.commit()
 
+    def clear_database(self):
+        """Clear all data from the database."""
+        cursor = self.connection.cursor()
+        cursor.execute('DELETE FROM room_devices')
+        cursor.execute('DELETE FROM devices')
+        cursor.execute('DELETE FROM rooms')
+        cursor.execute('DELETE FROM history')
+        self.connection.commit()
+        print("Database cleared") 
+
     def close_connection(self):
         if self.connection:
             self.connection.close()
             print("Connection closed")
 
  
+DB_FILE = os.path.join(os.path.dirname(__file__), 'data.db')
+
+db = Database(DB_FILE)
 
 
-db_file = os.path.join(os.path.dirname(__file__), 'data.db')
-db = Database(db_file)
 
 if db.connection is not None:
     db.create_tables()
     db.insert_data()
-    
-        
-    # Close the connection
     db.close_connection()
 else:
     print("Failed to create the database connection")

@@ -1,7 +1,7 @@
 import pytest
 import sqlite3
 import os
-from database import __database__ as db
+from . import database as db
 
 @pytest.fixture
 def setup_database():
