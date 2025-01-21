@@ -166,7 +166,7 @@ poetry run chalet
 
 
 ## Architecture du projet
-```
+
 |_ `.github`
 |_ `chalet`
 |    |_ `__pycache__`
@@ -195,4 +195,4 @@ poetry run chalet
 |_ `.gitignore`
 |_ `pyproject.toml`
 |_ `README.md`
-```
+
