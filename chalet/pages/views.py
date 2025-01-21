@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from chalet.mqtt_client import publish_message, get_value
 from meteo.__meteo__ import load_history, get_weather_data
+import process_data as pd
 
 import io
 
