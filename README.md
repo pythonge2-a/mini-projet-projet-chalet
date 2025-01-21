@@ -29,7 +29,7 @@ poetry install
 
 TEST :
 ```bash
-pytest tests/tests_unitaires.py
+poetry run pytest tests/tests_unitaires.py
 ```
 
 

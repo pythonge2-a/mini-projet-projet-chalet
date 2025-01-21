@@ -12,7 +12,7 @@ import threading
 API_KEY = "a6c1dbb02550e86bcd5e14e948c3bba3"
 LATITUDE = 46.77920475844563
 LONGITUDE = 6.6589111250491975
-HISTORICAL_FILE = "historical_weather_data.json"  # Nom du fichier pour stocker les données
+HISTORICAL_FILE = "meteo/historical_weather_data.json"  # Nom du fichier pour stocker les données
 GRAPH_FOLDER = "meteo/graphs"  # Dossier pour les graphiques
 file_path = os.path.join(GRAPH_FOLDER, "simple_graph.png")
 
