@@ -72,7 +72,7 @@ schedule.every(0.1).seconds.do(update_data)
 def run_scheduler():
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(0.1)
 
 thread = threading.Thread(target=run_scheduler, daemon=True)
 thread.start()
