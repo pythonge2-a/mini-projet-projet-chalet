@@ -195,3 +195,4 @@ poetry run chalet
 |_ `.gitignore`
 |_ `pyproject.toml`
 |_ `README.md`
+```
