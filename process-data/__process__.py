@@ -77,7 +77,5 @@ def run_scheduler():
 thread = threading.Thread(target=run_scheduler, daemon=True)
 thread.start()
 
-print("Le script principal continue son exécution...")
-
 
 
