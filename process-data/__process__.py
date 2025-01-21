@@ -2,7 +2,7 @@
 # Process des data et les rend disponibles pour l'application
 #
 import database as db
-import schedule
+import sched
 import threading
 import time
 
@@ -67,11 +67,11 @@ def update_data():
     
     print("Data updated successfully")
 
-schedule.every(0.1).seconds.do(update_data)
+sched.every(0.1).seconds.do(update_data)
 
 def run_scheduler():
     while True:
-        schedule.run_pending()
+        sched.run_pending()
         time.sleep(0.1)
 
 thread = threading.Thread(target=run_scheduler, daemon=True)
