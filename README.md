@@ -164,3 +164,35 @@ poetry run chalet
 
 ### 4. Utiliser l'interface
 
+
+## Architecture du projet
+```
+|_ `.github`  
+|_ `chalet`  
+|    |_ `__pycache__`  
+|    |_ `pages`  
+|    |_ `webServer`  
+|    |_ `__init__.py`  
+|    |_ `__main__.py`  
+|    |_ `db.sqlite3`  
+|    |_ `manage.py`  
+|    |_ `mqtt_client.py`  
+|_ `database`  
+|    |_ `__pycache__`  
+|    |_ `__database__.py`  
+|    |_ `data.db`  
+|_ `documentation`  
+|    |_ `cahier-des-charges.md`  
+|_ `meteo`  
+|    |_ `__pycache__`  
+|    |_ `graphs`  
+|    |_ `__meteo__.py`  
+|_ `process_data`  
+|    |_ `__init__.py`   
+|    |_ `__process__.py`  
+|_ `tests`  
+|    |_ `tests_unitaires.py`  
+|_ `.gitignore`  
+|_ `pyproject.toml`  
+|_ `README.md`  
+```
