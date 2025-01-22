@@ -71,7 +71,7 @@ def cleandb(ctx):
 def seed():
     global database_instance
     if not os.path.exists(DB_FILE):
-        database_instance = db.Database(DB_FILE)
+        database_instance = db(DB_FILE)
         if database_instance.connection is not None:
             database_instance.create_tables()
             database_instance.insert_data()
