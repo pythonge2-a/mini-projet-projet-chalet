@@ -5,12 +5,9 @@ from django.contrib.auth.decorators import login_required
 from typing import Any
 from django.http import HttpResponse
 from django.utils import timezone
-from chalet.mqtt_client import publish_message, get_value
-from chalet.meteo.meteo import load_history, get_weather_data
-import chalet.process_data as pd
-import chalet.database as db
-
-import io
+from chalet.services.sensor_service import SensorService
+from chalet.services.device_service import DeviceService
+import chalet.process_data.process as pd
 
 # Create your views here.
 def home_view(request):
@@ -28,58 +25,21 @@ def graph_view(request):
 
 @login_required
 def captors_view(request):
+    # Getting the weather data and the room data
+    weather_data = SensorService.get_weather_data()
+    room_data = SensorService.get_room_data()
+    
+    db = pd.get_db() # Do this to avoid multiple connections, here there is only one connection
+
     try:
-        history = load_history()
-        temperature_value, pressure_value, humidity_value, weather_description = get_weather_data(history, save=False)
-        if temperature_value is None or humidity_value is None or pressure_value is None or weather_description is None:
-            raise Exception('Error while getting weather data')
-        room_temp = get_value("capteur/temperature")
-        room_humidity = get_value("capteur/humidite")
-        if room_temp is None or room_humidity is None:
-            raise Exception('Error while getting room data')
-    except Exception as e:
-        print(f"Error: {e}")
-        temperature_value = 'N/A'
-        pressure_value = 'N/A'
-        humidity_value = 'N/A'
-        weather_description = 'N/A'
-        room_temp = 'N/A'
-        room_humidity = 'N/A'
-
-    db.update_device_state("temperature sensor_bedroom", str(room_temp) + "°C")
-    db.update_device_state("humidity sensor_all", str(room_humidity) + "%")
+        DeviceService.update_sensors(room_data, db)
     
-    if request.method == 'POST':
-        print("POST request received", request.POST)
-        db.update_device_state("lamp_bedroom_switch", "on" if request.POST.get('toggle_light_room') == 'on' else "off")
-        db.update_device_state("lamp_living_room_switch", "on" if request.POST.get('toggle_light_living') == 'on' else "off")
-        db.update_device_state("lamp_kitchen_switch", "on" if request.POST.get('toggle_light_kitchen') == 'on' else "off")
-        db.update_device_state("lamp_bathroom_switch", "on" if request.POST.get('toggle_light_bathroom') == 'on' else "off")
-
-        if 'toggle_light_room' in request.POST:
-            print(f"Light status room: {db.get_device_state('lamp_bedroom')}")
-            publish_message('intLed/ON' if db.get_device_state('lamp_bedroom') == 1 else 'intLed/OFF')
-
-    
-    context = {
-        'room_temperature_value': db.get_device_state('temperature sensor_bedroom'),
-        'room_humidity_value': db.get_device_state('humidity sensor_all'),
-        'light_status_room' : db.get_device_state('lamp_bedroom_switch') == 1,
-        'living_temperature_value': 22.5,
-        'living_humidity_value': 50.0,
-        'light_status_living' : db.get_device_state('lamp_living_room_switch') == 1,
-        'kitchen_temperature_value': 22.5,
-        'kitchen_humidity_value': 50.0,
-        'light_status_kitchen' : db.get_device_state('lamp_kitchen_switch') == 1,
-        'bathroom_temperature_value': 22.5,
-        'bathroom_humidity_value': 50.0,
-        'light_status_bathroom' : db.get_device_state('lamp_bathroom_switch') == 1,
-        # Données météo extérieure
-        'outside_temperature_value': temperature_value,
-        'outside_pressure_value': pressure_value,
-        'outside_humidity_value': humidity_value,
-        'outside_weather' : weather_description,
-    }
+        if request.method == 'POST':
+            DeviceService.handle_lights(request, db)
+        
+        context = DeviceService.build_context(db, weather_data, room_data)
+    finally:
+        db.close_connection()
     return render(request, 'captors.html', context)
 
 def register(request: Any) -> Any:

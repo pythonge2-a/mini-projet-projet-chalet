@@ -69,6 +69,7 @@
                     <h2 class="card-title">Lumière</h2>
                     <form method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="toggle_light_living" value="off">
                         <label class="switch">
                             <input type="checkbox" name="toggle_light_living" onchange="submitForm(this)" {% if light_status_living %}checked{% endif %}>
                             <span class="slider round"></span>
@@ -106,6 +107,7 @@
                     <h2 class="card-title">Lumière</h2>
                     <form method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="toggle_light_kitchen" value="off">
                         <label class="switch">
                             <input type="checkbox" name="toggle_light_kitchen" onchange="submitForm(this)" {% if light_status_kitchen %}checked{% endif %}>
                             <span class="slider round"></span>
@@ -143,6 +145,7 @@
                     <h2 class="card-title">Lumière</h2>
                     <form method="POST">
                         {% csrf_token %}
+                        <input type="hidden" name="toggle_light_bathroom" value="off">
                         <label class="switch">
                             <input type="checkbox" name="toggle_light_bathroom" onchange="submitForm(this)" {% if light_status_bathroom %}checked{% endif %}>
                             <span class="slider round"></span>

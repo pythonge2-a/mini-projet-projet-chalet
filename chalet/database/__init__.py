@@ -1,17 +1,21 @@
 import sqlite3
 from sqlite3 import Error
 import os
+import threading
 
 class Database:
+    _lock = threading.Lock()
+
     def __init__(self, db_file):
-        self.connection = self.create_connection(db_file)
+        self.db_file = db_file
+        self.connection = self.create_connection()
     
-    def create_connection(self, db_file):
+    def create_connection(self):
         """Create a connection to the SQLite database specified by db_file."""
         connection = None
         try:
-            connection = sqlite3.connect(db_file)
-            print(f"Successfully connected to the database {db_file}")
+            connection = sqlite3.connect(self.db_file)
+            print(f"Successfully connected to the database {self.db_file}")
         except Error as e:
             print(f"Error connecting to the database: {e}")
         return connection
@@ -31,7 +35,7 @@ class Database:
                 CREATE TABLE IF NOT EXISTS devices (
                     id INTEGER PRIMARY KEY,
                     type TEXT NOT NULL,
-                    state TEXT NOT NULL
+                    state INTEGER NOT NULL
                 )
             ''')
             # Create room_devices table
@@ -123,23 +127,30 @@ class Database:
             print(f"Error inserting data: {e}")
     def get_device_state(self, device_type):
         """Get the state of a device by its type."""
-        cursor = self.connection.cursor()
-        cursor.execute('SELECT state FROM devices WHERE type = ?', (device_type,))
-        result = cursor.fetchone()
-        return result[0] if result else None
+        with self._lock:
+            try:
+                cursor = self.connection.cursor()
+                cursor.execute('SELECT state FROM devices WHERE type = ?', (device_type,))
+                result = cursor.fetchone()
+                return int(result[0]) if result else None
+            except Error as e:
+                print(f"Error getting device state: {e}")
+                return None
 
     def update_device_state(self, device_type, new_state):
         """Update the state of a device by its type."""
-        cursor = self.connection.cursor()
-        cursor.execute('UPDATE devices SET state = ? WHERE type = ?', (new_state, device_type))
-        self.connection.commit()
-
-
+        with self._lock:
+            try:
+                cursor = self.connection.cursor()
+                cursor.execute('UPDATE devices SET state = ? WHERE type = ?', (new_state, device_type))
+                self.connection.commit()
+            except Error as e:
+                print(f"Error updating device state: {e}")
 
     def close_connection(self):
         if self.connection:
             self.connection.close()
-            print("Connection closed")
+            print("Data base connection closed")
 
  
 DB_FILE = os.path.join(os.path.dirname(__file__), 'data.db')
