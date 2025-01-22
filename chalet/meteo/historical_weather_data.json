@@ -80,5 +80,32 @@
             1737461612.7349808,
             1737461619.1933365
         ]
+    },
+    "2025-01-22": {
+        "temperatures": [
+            5.73,
+            5.73,
+            5.73
+        ],
+        "pressures": [
+            1010,
+            1010,
+            1010
+        ],
+        "humidities": [
+            86,
+            86,
+            86
+        ],
+        "weather_conditions": [
+            "overcast clouds",
+            "overcast clouds",
+            "overcast clouds"
+        ],
+        "timestamps": [
+            1737556320.4659345,
+            1737556350.4730666,
+            1737556380.1981142
+        ]
     }
 }
