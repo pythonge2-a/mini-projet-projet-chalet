@@ -99,6 +99,8 @@ def get_connected_clients():
     return list(connected_clients)
 
 def close_connection():
+    publish_message("intLed/OFF")
+    publish_message("led1/OFF")
     client.loop_stop()
     client.disconnect()
     print("Disconnected from MQTT broker")
