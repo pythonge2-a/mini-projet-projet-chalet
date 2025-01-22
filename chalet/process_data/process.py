@@ -114,7 +114,14 @@ def heating_on_bedroom(db: Database) -> None:
         humidity = db.get_device_state('humidity sensor_all')
         print(f"Current humidity state: {humidity if humidity != -1000 else 'N/A'}")
         if humidity is not None and humidity != -1000:
-            intensity = min(max(humidity, 0), 100) # Ensure that the value is between 0 and 100
+            if humidity < 30:
+                intensity = 0
+            elif humidity < 50:
+                intensity = 20
+            elif humidity < 70:
+                intensity = 50
+            else:
+                intensity = 100
             print(f"Setting heater intensity to {intensity}")
             publish_message(f"led1/{intensity}")
             db.update_device_state('heater_bedroom', intensity)
