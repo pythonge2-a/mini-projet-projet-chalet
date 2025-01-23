@@ -142,7 +142,7 @@ sudo reboot
 ### 1. Cloner le dépôt
 Avant de commencer, vous devez cloner le dépôt sur votre machine locale. Pour ce faire, ouvrez un terminal et exécutez la commande suivante :
 ```bash
-git clone <nom-du-dépôt>
+git clone git@github.com:pythonge2-a/mini-projet-projet-chalet.git
 ```
 
 ### 2. Installer les dépendances
@@ -157,6 +157,11 @@ Une fois les dépendances installées, vous pouvez exécuter le programme. Pour 
 poetry run chalet
 ```
 
-### 4. Utiliser l'interface
+### 4. Tests unaitaires
+Pour lancer les tests unitaires, exécutez la commande suivante :
+```bash
+poetry run pytest
+```
+
 
 
