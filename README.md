@@ -9,7 +9,7 @@
 
 ## Description
 
-Projet python pour la domotique d'un chalet
+Ce projet consiste à développer un système domotique simulé pour un chalet. L'objectif est de proposer une gestion automatisée et intelligente de certains équipements du chalet à partir de données externes et de critères définis. Le système est entièrement réalisé en Python et repose sur des données simulées ou récupérées en ligne.
 
 ## Cahier des charges
 
