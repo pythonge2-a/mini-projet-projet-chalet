@@ -9,7 +9,7 @@
 
 ## Description
 
-Description du projet en quelques lignes
+Projet python pour la domotique d'un chalet
 
 ## Cahier des charges
 
@@ -17,12 +17,6 @@ Voir fichier `cahier-des-charges.md` dans le dossier `documentation`.
 ```
 documentation
 |__cahier-des-charges.md
-```
-
-## Installation
-
-```bash
-poetry install
 ```
 
 ## Configuration serveur web
