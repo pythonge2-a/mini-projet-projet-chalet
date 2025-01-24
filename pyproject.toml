@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "chalet"
+version = "0.1.0"
+description = "Bin-Lin domotique"
+authors = ["Aurore Delessert <aurore.delessert@heig-vd.ch>,Thomas Bachmann <thomas.bachmann@heig-vd.ch>, Alexis Lantier <alexis.lantier@heig-vd.ch>"]
+license = "HEIG"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+matplotlib = "^3.9.4"
+requests = "^2.32.3"
+django = "^5.1.4"
+django-crispy-forms = "^2.3"
+numpy = "1.25.2"
+paho-mqtt = "^2.1.0"
+crispy-bootstrap4 = "^2024.10"
+click = "^8.1.8"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+chalet = "chalet.__main__:main"
+ 

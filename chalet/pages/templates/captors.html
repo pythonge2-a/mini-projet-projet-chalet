@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block title %}Captors{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Chambre -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Chambre</h2>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Température</h2>
+                    <p class="card-text room_temperature_value">{{ room_temperature_value }}°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Humidité</h2>
+                    <p class="card-text room_humidity_value">{{ room_humidity_value }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Lumière</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="toggle_light_room" value="off">
+                        <label class="switch">
+                            <input type="checkbox" name="toggle_light_room" onchange="submitForm(this)" {% if light_status_room %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Salon -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Salon</h2>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Température</h2>
+                    <p class="card-text">{{ living_temperature_value }}°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Humidité</h2>
+                    <p class="card-text">{{ living_humidity_value }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Lumière</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="toggle_light_living" value="off">
+                        <label class="switch">
+                            <input type="checkbox" name="toggle_light_living" onchange="submitForm(this)" {% if light_status_living %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cuisine -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Cuisine</h2>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Température</h2>
+                    <p class="card-text">{{ kitchen_temperature_value }}°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Humidité</h2>
+                    <p class="card-text">{{ kitchen_humidity_value }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Lumière</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="toggle_light_kitchen" value="off">
+                        <label class="switch">
+                            <input type="checkbox" name="toggle_light_kitchen" onchange="submitForm(this)" {% if light_status_kitchen %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Salle de bain -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Salle de bain</h2>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Température</h2>
+                    <p class="card-text">{{ bathroom_temperature_value }}°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Humidité</h2>
+                    <p class="card-text">{{ bathroom_humidity_value }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Lumière</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="toggle_light_bathroom" value="off">
+                        <label class="switch">
+                            <input type="checkbox" name="toggle_light_bathroom" onchange="submitForm(this)" {% if light_status_bathroom %}checked{% endif %}>
+                            <span class="slider round"></span>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Extérieur -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <h2>Extérieur</h2>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Température</h2>
+                    <p class="card-text outside_temperature_value">{{ outside_temperature_value }}°C</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Pression</h2>
+                    <p class="card-text outside_pressure_value">{{ outside_pressure_value }}hPa</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Humidité</h2>
+                    <p class="card-text outside_humidity_value">{{ outside_humidity_value }}%</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">Météo</h2>
+                    <p class="card-text outside_weather">{{ outside_weather }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function submitForm(element) {
+        const form = element.closest('form');
+        const formData = new FormData(form);
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+            }
+        }).then(response => {
+            if (!response.ok) {
+                console.error('Error submitting form');
+            }
+        }).catch(error => {
+            console.error('Error submitting form', error);
+        });
+    }
+
+    function updateValues() {
+        fetch(window.location.href)
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                
+                // Mise à jour des valeurs de température et humidité
+                updateElement('room_temperature_value', doc);
+                updateElement('room_humidity_value', doc);
+                updateElement('outside_temperature_value', doc);
+                updateElement('outside_humidity_value', doc);
+                updateElement('outside_pressure_value', doc);
+                updateElement('outside_weather', doc);
+            })
+            .catch(error => console.error('Error fetching updates:', error));
+    }
+
+    function updateElement(className, doc) {
+        const newValue = doc.querySelector(`.${className}`);
+        const currentElement = document.querySelector(`.${className}`);
+        if (newValue && currentElement) {
+            currentElement.textContent = newValue.textContent;
+        }
+    }
+
+    // Mettre à jour toutes les 5 secondes
+    setInterval(updateValues, 10000);
+</script>
+{% endblock %}
