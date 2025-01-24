@@ -1,6 +1,7 @@
 # Dans mqtt_client.py
 
 import paho.mqtt.client as mqtt
+import time
 
 MQTT_BROKER = '192.168.4.1'
 MQTT_PORT = 1883
@@ -55,10 +56,17 @@ client.on_disconnect = on_client_disconnect
 
 def connect():
     try:
+        print(f"Connecting to MQTT broker: {MQTT_BROKER}:{MQTT_PORT}")
         client.connect(MQTT_BROKER, MQTT_PORT, 60)
         client.loop_start()
+
+        time.sleep(2)
+
+        if not client.is_connected():
+            raise Exception("Failed to connect to MQTT broker")
+        print("Connected to MQTT broker")
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"MQTT Connection error: {e}")
 
 def publish_message(message):
     try:
@@ -89,3 +97,10 @@ def get_value(mqtt_topic):
 
 def get_connected_clients():
     return list(connected_clients)
+
+def close_connection():
+    publish_message("intLed/OFF")
+    publish_message("led1/OFF")
+    client.loop_stop()
+    client.disconnect()
+    print("Disconnected from MQTT broker")

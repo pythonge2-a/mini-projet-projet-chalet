@@ -15,6 +15,7 @@ django-crispy-forms = "^2.3"
 numpy = "1.25.2"
 paho-mqtt = "^2.1.0"
 crispy-bootstrap4 = "^2024.10"
+click = "^8.1.8"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"

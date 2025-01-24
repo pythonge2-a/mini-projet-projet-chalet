@@ -189,15 +189,16 @@ def plot_weather_data(history):
 scheduler = sched.scheduler(time.time, time.sleep)
 
 def scheduled_task():
+    print("Running meteo scheduled task")
     history = load_history()
     get_weather_data(history, save=True)
     plot_weather_data(history)
-    
+    print("Meteo task completed")
     #15 minutes
-    scheduler.enter(900, 1, scheduled_task)
+    scheduler.enter(900, 2, scheduled_task)
 
 def start_scheduler():
-    scheduler.enter(0, 1, scheduled_task)
+    scheduler.enter(0, 2, scheduled_task)
     scheduler.run()
 
 
